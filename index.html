@@ -15,6 +15,7 @@
       justify-content: center;
       font-family: 'Comic Sans MS', cursive;
       overflow: hidden;
+      text-align: center;
     }
 
     h1 {
@@ -30,19 +31,18 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 18px;
-      border-radius: 10px;
+    #startButton {
+      padding: 20px 40px;
+      font-size: 24px;
+      border-radius: 15px;
       border: none;
       background-color: #ff69b4;
       color: white;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
 
-    button:hover {
+    #startButton:hover {
       background-color: #ff85c1;
     }
 
@@ -67,18 +67,14 @@
   </style>
 </head>
 <body>
-  <div id="input-container">
-    <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
-    <button onclick="showBirthdayWish()">Xem lời chúc</button>
-  </div>
-
-  <div id="wish-container" class="hidden">
+  <div id="wish-container">
     <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
     <p style="color:white;font-size:22px;">Chúc bạn thật nhiều niềm vui, sức khỏe và hạnh phúc nhé 💖</p>
+    <button id="startButton">🎵 Nhấn để bật nhạc và bong bóng!</button>
   </div>
 
   <audio id="music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2023/03/02/audio_6ef82e17a3.mp3" type="audio/mpeg">
+    <source src="https://raw.githubusercontent.com/<username>/<repo>/main/birthday.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -92,12 +88,20 @@
       setTimeout(() => balloon.remove(), 8000);
     }
 
-    function showBirthdayWish() {
-      document.getElementById('input-container').classList.add('hidden');
-      document.getElementById('wish-container').classList.remove('hidden');
-      document.getElementById('music').play();
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', () => {
+      // Phát nhạc
+      const music = document.getElementById('music');
+      music.play().catch(() => {
+        alert("🎵 Nhấn play nếu nhạc không chạy trên trình duyệt của bạn.");
+      });
+
+      // Bắt đầu bong bóng
       setInterval(createBalloon, 500);
-    }
+
+      // Ẩn nút
+      startButton.style.display = 'none';
+    });
   </script>
 </body>
 </html>
