@@ -13,13 +13,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: 'Comic Sans MS', cursive;
+      font-family: 'sans-serif', cursive;
       overflow: hidden;
       text-align: center;
     }
 
     h1 {
-      font-size: 70px; /* chữ chính */
+      font-size: 70px;
       color: #fff;
       text-shadow: 2px 2px 10px #ff69b4;
       margin-bottom: 20px;
@@ -27,28 +27,17 @@
     }
 
     p {
-      font-size: 60px; /* lời chúc */
+      font-size: 60px;
       color: white;
     }
 
-    input, button {
+    input {
       padding: 10px 15px;
       font-size: 18px;
       border-radius: 8px;
       border: none;
       outline: none;
       margin: 5px;
-    }
-
-    button {
-      cursor: pointer;
-      background-color: #ff69b4;
-      color: white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    button:hover {
-      background-color: #ff85c1;
     }
 
     .hidden {
@@ -81,7 +70,6 @@
   <div id="input-container">
     <h1>🎈 Nhập ngày sinh của bạn 🎂</h1>
     <input type="date" id="birthdayInput">
-    <button onclick="showWish()">Xem lời chúc</button>
   </div>
 
   <div id="wish-container" class="hidden">
@@ -100,12 +88,14 @@
       setTimeout(() => balloon.remove(), 8000);
     }
 
-    function showWish() {
-      // Bỏ kiểm tra ngày sinh → hiển thị luôn
+    const birthdayInput = document.getElementById('birthdayInput');
+
+    // Khi người dùng chọn ngày sinh → hiện lời chúc
+    birthdayInput.addEventListener('change', () => {
       document.getElementById('input-container').classList.add('hidden');
       document.getElementById('wish-container').classList.remove('hidden');
-      setInterval(createBalloon, 500);
-    }
+      setInterval(createBalloon, 500); // bong bóng bay liên tục
+    });
   </script>
 
 </body>
