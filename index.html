@@ -30,16 +30,21 @@
       z-index: 2;
     }
 
-    p {
+    #wish-text {
       font-size: 32px;
       color: white;
-      opacity: 0;
-      transition: opacity 2s ease;
       max-width: 85%;
       margin: 0 auto 10px;
       line-height: 1.6;
       white-space: pre-line;
       z-index: 2;
+      min-height: 220px; /* để luôn có chỗ cho chữ */
+    }
+
+    #wish-text div {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1.5s ease, transform 1.5s ease;
     }
 
     .select-row {
@@ -102,7 +107,6 @@
   <div id="input-container">
     <h1>🎈 Chọn ngày sinh 🎂</h1>
     <div class="select-row">
-      <!-- Ngày ở trước, tháng ở sau -->
       <select id="day" aria-label="Chọn ngày">
         <option value="">Ngày</option>
       </select>
@@ -127,11 +131,11 @@
 
   <div id="wish-container" class="hidden" aria-live="polite">
     <h1>🎉 Chúc Mừng Sinh Nhật Cô 🎉</h1>
-    <p id="wish-text"></p>
+    <div id="wish-text"></div>
   </div>
 
   <script>
-    // tạo danh sách ngày
+    // Tạo danh sách ngày
     (function populateDays() {
       const day = document.getElementById('day');
       for (let i = 1; i <= 31; i++) {
@@ -143,12 +147,11 @@
       }
     })();
 
-    // 💬 Cập nhật đoạn chúc như bạn yêu cầu
     const wishes = [
-      `Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc. 
-Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò. 
-Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình. 
-Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương 💐💖`
+`Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc. 💖
+Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò. 🌸
+Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình. 🌼
+Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương! 🎂💐`
     ];
 
     const monthSelect = document.getElementById('month');
@@ -158,34 +161,42 @@ Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm
     const wishText = document.getElementById('wish-text');
     const balloonContainer = document.getElementById('balloonContainer');
 
-    let wishesRunning = false;
+    let balloonCount = 0;
+    const MAX_BALLOONS = 15;
 
     function createBalloon() {
+      if (balloonCount >= MAX_BALLOONS) return;
+      balloonCount++;
       const balloon = document.createElement('div');
       balloon.className = 'balloon';
       balloon.style.left = Math.random() * 90 + 'vw';
-      const duration = 12 + Math.random() * 8;
+      const duration = 10 + Math.random() * 8;
       balloon.style.animationDuration = duration + 's';
-      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 85%, 70%)`);
+      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 80%, 70%)`);
       balloonContainer.appendChild(balloon);
-      setTimeout(() => balloon.remove(), duration * 1000);
+      setTimeout(() => { balloon.remove(); balloonCount--; }, duration * 1000);
     }
 
-    async function runWishesLoop() {
-      if (wishesRunning) return;
-      wishesRunning = true;
+    async function showWishText() {
+      const msg = wishes[0];
+      wishText.innerHTML = ""; // xóa cũ
+      const lines = msg.split("\n");
 
-      for (const msg of wishes) {
-        wishText.style.opacity = 0;
-        await new Promise(r => setTimeout(r, 500));
-        wishText.textContent = msg;
-        wishText.style.opacity = 1;
+      for (const line of lines) {
+        const div = document.createElement("div");
+        div.textContent = line.trim();
+        wishText.appendChild(div);
+        await new Promise(r => setTimeout(r, 800));
+        requestAnimationFrame(() => {
+          div.style.opacity = 1;
+          div.style.transform = "translateY(0)";
+        });
+        await new Promise(r => setTimeout(r, 1500));
       }
     }
 
     function showWish() {
       if (!monthSelect.value || !daySelect.value) return;
-
       inputContainer.classList.add('hidden');
       wishContainer.classList.remove('hidden');
 
@@ -193,7 +204,7 @@ Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm
         window._balloonInterval = setInterval(createBalloon, 1500);
       }
 
-      runWishesLoop().catch(console.error);
+      showWishText().catch(console.error);
     }
 
     monthSelect.addEventListener('change', showWish);
