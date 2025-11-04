@@ -30,6 +30,7 @@
       font-size: 36px;
       color: white;
       margin: 10px 20px;
+      min-height: 50px;
     }
 
     select {
@@ -106,6 +107,8 @@
       "Chúc cô mạnh khỏe, hạnh phúc, và tiếp tục truyền cảm hứng cho học sinh như cô vẫn làm."
     ];
 
+    let currentIndex = 0;
+
     function createBalloon() {
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
@@ -134,7 +137,15 @@
       if(monthSelect.value && daySelect.value){
         document.getElementById('input-container').classList.add('hidden');
         document.getElementById('wish-container').classList.remove('hidden');
-        wishText.textContent = wishes[Math.floor(Math.random()*wishes.length)];
+        currentIndex = 0;
+        wishText.textContent = wishes[currentIndex];
+
+        // Hiển thị lần lượt từng lời chúc mỗi 5-10 giây
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % wishes.length;
+          wishText.textContent = wishes[currentIndex];
+        }, 5000-8000); // 7 giây, bạn có thể đổi 5000-10000 để random thời gian
+
         setInterval(createBalloon, 300);
         setInterval(createConfetti, 200);
       }
