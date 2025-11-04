@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>🎂 Chúc mừng sinh nhật 🎉</title>
+  <!-- Dùng Google Font hỗ trợ tiếng Việt -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -13,13 +15,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: 'sans-serif', cursive;
+      font-family: 'Baloo 2', cursive; /* Font đẹp + hỗ trợ tiếng Việt */
       overflow: hidden;
       text-align: center;
     }
 
     h1 {
-      font-size: 70px;
+      font-size: 70px; /* chữ lớn */
       color: #fff;
       text-shadow: 2px 2px 10px #ff69b4;
       margin-bottom: 20px;
@@ -27,13 +29,13 @@
     }
 
     p {
-      font-size: 60px;
+      font-size: 70px; /* lời chúc */
       color: white;
     }
 
-    input {
+    select {
       padding: 10px 15px;
-      font-size: 18px;
+      font-size: 20px;
       border-radius: 8px;
       border: none;
       outline: none;
@@ -68,8 +70,30 @@
 <body>
 
   <div id="input-container">
-    <h1>🎈 Nhập ngày sinh của bạn 🎂</h1>
-    <input type="date" id="birthdayInput">
+    <h1>🎈 Chọn ngày sinh của bạn 🎂</h1>
+    <select id="month">
+      <option value="">Tháng</option>
+      <option value="1">01</option>
+      <option value="2">02</option>
+      <option value="3">03</option>
+      <option value="4">04</option>
+      <option value="5">05</option>
+      <option value="6">06</option>
+      <option value="7">07</option>
+      <option value="8">08</option>
+      <option value="9">09</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+    <select id="day">
+      <option value="">Ngày</option>
+      <script>
+        for (let i = 1; i <= 31; i++) {
+          document.write(`<option value="${i}">${i.toString().padStart(2,'0')}</option>`);
+        }
+      </script>
+    </select>
   </div>
 
   <div id="wish-container" class="hidden">
@@ -88,14 +112,19 @@
       setTimeout(() => balloon.remove(), 8000);
     }
 
-    const birthdayInput = document.getElementById('birthdayInput');
+    const monthSelect = document.getElementById('month');
+    const daySelect = document.getElementById('day');
 
-    // Khi người dùng chọn ngày sinh → hiện lời chúc
-    birthdayInput.addEventListener('change', () => {
-      document.getElementById('input-container').classList.add('hidden');
-      document.getElementById('wish-container').classList.remove('hidden');
-      setInterval(createBalloon, 500); // bong bóng bay liên tục
-    });
+    function showWish() {
+      if (monthSelect.value && daySelect.value) {
+        document.getElementById('input-container').classList.add('hidden');
+        document.getElementById('wish-container').classList.remove('hidden');
+        setInterval(createBalloon, 500);
+      }
+    }
+
+    monthSelect.addEventListener('change', showWish);
+    daySelect.addEventListener('change', showWish);
   </script>
 
 </body>
