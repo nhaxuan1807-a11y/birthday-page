@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>🎂 Chúc mừng sinh nhật 🎉</title>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -14,26 +13,34 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: 'Baloo 2', cursive;
+      font-family: 'Times New Roman', Times, serif; /* font chính */
       overflow: hidden;
       text-align: center;
     }
 
-   h1 {
-  font-family: 'Aptos Display', sans‑serif;
-  font-size: 70px; /* hoặc tùy chỉnh */
-}
-p {
-  font-family: 'Aptos Display', sans‑serif;
-  font-size: 60px;
-}
+    h1 {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 70px; /* chữ tiêu đề */
+      color: #fff;
+      text-shadow: 2px 2px 10px #ff69b4;
+      margin-bottom: 20px;
+      animation: fadeIn 1.5s ease-in;
+    }
+
+    p {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 40px; /* chữ lời chúc */
+      color: white;
+    }
+
     select {
       padding: 10px 15px;
-      font-size: 50px;
+      font-size: 30px; /* cỡ chữ dropdown */
       border-radius: 8px;
       border: none;
       outline: none;
       margin: 5px;
+      font-family: 'Times New Roman', Times, serif;
     }
 
     .hidden {
