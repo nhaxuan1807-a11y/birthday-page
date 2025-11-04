@@ -29,8 +29,11 @@
     p {
       font-size: 40px;
       color: white;
-      transition: opacity 1s ease;
-      max-width: 80%;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      max-width: 85%;
+      margin: 0 auto;
+      line-height: 1.4;
     }
 
     select {
@@ -43,7 +46,9 @@
       font-family: 'Times New Roman', Times, serif;
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
     .balloon {
       position: absolute;
@@ -53,7 +58,7 @@
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #fff, var(--color));
       opacity: 0.7;
-      animation: floatUp 10s linear infinite;
+      animation: floatUp 12s linear forwards;
     }
 
     @keyframes fadeIn {
@@ -63,7 +68,7 @@
 
     @keyframes floatUp {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
@@ -73,17 +78,17 @@
     <h1>🎈 Chọn ngày sinh của bạn 🎂</h1>
     <select id="month">
       <option value="">Tháng</option>
-      ${[...Array(12).keys()].map(i => `<option value="${String(i+1).padStart(2, '0')}">${String(i+1).padStart(2, '0')}</option>`).join('')}
+      ${[...Array(12).keys()].map(i => `<option value="${String(i+1).padStart(2,'0')}">${String(i+1).padStart(2,'0')}</option>`).join('')}
     </select>
     <select id="day">
       <option value="">Ngày</option>
-      ${[...Array(31).keys()].map(i => `<option value="${String(i+1).padStart(2, '0')}">${String(i+1).padStart(2, '0')}</option>`).join('')}
+      ${[...Array(31).keys()].map(i => `<option value="${String(i+1).padStart(2,'0')}">${String(i+1).padStart(2,'0')}</option>`).join('')}
     </select>
   </div>
 
   <div id="wish-container" class="hidden">
     <h1>🎉 Chúc Mừng Sinh Nhật Cô 🎉</h1>
-    <p id="wish-text">Kính chúc cô một ngày sinh nhật thật vui vẻ 💖</p>
+    <p id="wish-text"></p>
   </div>
 
   <script>
@@ -93,48 +98,48 @@
       "Chúc cô luôn trẻ trung, duyên dáng và nhận được thật nhiều yêu thương từ học trò 💐",
       "Mong rằng hôm nay sẽ là khởi đầu cho một năm mới tràn đầy hạnh phúc và thành công 🌷",
       "Chúc cô mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho các thế hệ học sinh 🎓",
-      "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌷",
+      "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌺",
       "Chúc cô có một sinh nhật thật đặc biệt, tràn ngập hoa, quà và những nụ cười yêu thương 🎀"
     ];
 
     const monthSelect = document.getElementById('month');
     const daySelect = document.getElementById('day');
-    const wishContainer = document.getElementById('wish-container');
     const inputContainer = document.getElementById('input-container');
+    const wishContainer = document.getElementById('wish-container');
     const wishText = document.getElementById('wish-text');
 
     function createBalloon() {
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
       balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.animationDuration = 8 + Math.random() * 5 + 's';
-      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 70%)`);
+      balloon.style.animationDuration = 10 + Math.random() * 5 + 's';
+      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 75%)`);
       document.body.appendChild(balloon);
-      setTimeout(() => balloon.remove(), 13000);
+      setTimeout(() => balloon.remove(), 14000);
+    }
+
+    async function showWishesSlowly() {
+      for (let i = 0; i < wishes.length; i++) {
+        wishText.style.opacity = 0;
+        await new Promise(r => setTimeout(r, 1000)); // fade out
+        wishText.textContent = wishes[i];
+        wishText.style.opacity = 1;
+        await new Promise(r => setTimeout(r, 8000)); // stay visible 8s
+      }
+      showWishesSlowly(); // lặp lại sau khi hết
     }
 
     function showWish() {
       if (monthSelect.value && daySelect.value) {
         inputContainer.classList.add('hidden');
         wishContainer.classList.remove('hidden');
-        setInterval(createBalloon, 1200);
-
-        let index = 0;
-        wishText.textContent = wishes[index];
-        setInterval(() => {
-          index = (index + 1) % wishes.length;
-          wishText.style.opacity = 0;
-          setTimeout(() => {
-            wishText.textContent = wishes[index];
-            wishText.style.opacity = 1;
-          }, 1000);
-        }, 8000); // mỗi câu hiển thị ~8s
+        setInterval(createBalloon, 2000); // nhẹ hơn, không lag
+        showWishesSlowly();
       }
     }
 
     monthSelect.addEventListener('change', showWish);
     daySelect.addEventListener('change', showWish);
   </script>
-
 </body>
 </html>
