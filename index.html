@@ -13,36 +13,36 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: 'Comic Sans MS', cursive;
+      font-family: sans-serif, cursive;
       overflow: hidden;
       text-align: center;
     }
 
-    h1 {
-      font-size: 50px;
+   h1 {
+      font-size: 70px; /* chữ chính */
       color: #fff;
       text-shadow: 2px 2px 10px #ff69b4;
       margin-bottom: 20px;
       animation: fadeIn 1.5s ease-in;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    p {
+      font-size: 60px; /* lời chúc */
+      color: white;
     }
 
-    #startButton {
-      padding: 20px 40px;
-      font-size: 24px;
-      border-radius: 15px;
+    button {
+      font-size: 20px; /* nút */
+      padding: 15px 30px;
+      border-radius: 10px;
       border: none;
+      cursor: pointer;
       background-color: #ff69b4;
       color: white;
-      cursor: pointer;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    #startButton:hover {
+    button:hover {
       background-color: #ff85c1;
     }
 
@@ -63,21 +63,12 @@
   </style>
 </head>
 <body>
-  <div id="wish-container">
-    <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
-    <p style="color:white;font-size:22px;">Chúc bạn thật nhiều niềm vui, sức khỏe và hạnh phúc nhé 💖</p>
-    <button id="startButton">🎵 Nhấn để bật nhạc và bong bóng!</button>
-  </div>
 
-  <audio id="music" loop></audio>
+  <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
+  <p style="color:white;font-size:22px;">Chúc bạn thật nhiều niềm vui, sức khỏe và hạnh phúc nhé 💖</p>
+  <button id="startButton">🎈 Bắt đầu bong bóng!</button>
 
   <script>
-    const tracks = [
-      "https://nhaxuan1807-a11y.github.io/birthday-wish/",
-      "https://nhaxuan1807-a11y.github.io/birthday-wish1/",
-      "https://nhaxuan1807-a11y.github.io/birthday-wish2/"
-    ];
-
     function createBalloon() {
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
@@ -90,20 +81,10 @@
 
     const startButton = document.getElementById('startButton');
     startButton.addEventListener('click', () => {
-      // Chọn nhạc ngẫu nhiên
-      const randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
-      const music = document.getElementById('music');
-      music.src = randomTrack;
-      music.play().catch(() => {
-          alert("🎵 Nhấn Play nếu nhạc không chạy trên trình duyệt.");
-      });
-
-      // Bắt đầu bong bóng
-      setInterval(createBalloon, 500);
-
-      // Ẩn nút
-      startButton.style.display = 'none';
+      setInterval(createBalloon, 500); // Bong bóng liên tục
+      startButton.style.display = 'none'; // ẩn nút sau khi nhấn
     });
   </script>
+
 </body>
 </html>
