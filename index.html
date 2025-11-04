@@ -19,50 +19,50 @@
     }
 
     h1 {
-      font-size: 70px;
+      font-size: 56px;
       color: #fff;
       text-shadow: 2px 2px 10px #ff69b4;
-      margin-bottom: 20px;
-      animation: fadeIn 1.5s ease-in;
+      margin-bottom: 18px;
+      animation: fadeIn 1.2s ease-in;
     }
 
     p {
-      font-size: 40px;
+      font-size: 32px;
       color: white;
       opacity: 0;
-      transition: opacity 1.5s ease;
+      transition: opacity 1s ease;
       max-width: 85%;
-      margin: 0 auto;
+      margin: 0 auto 10px;
       line-height: 1.4;
+      min-height: 72px;
     }
 
     select {
-      padding: 10px 15px;
-      font-size: 30px;
+      padding: 10px 12px;
+      font-size: 22px;
       border-radius: 8px;
       border: none;
       outline: none;
-      margin: 5px;
+      margin: 6px;
       font-family: 'Times New Roman', Times, serif;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
     .balloon {
       position: absolute;
-      bottom: -150px;
-      width: 40px;
-      height: 60px;
+      bottom: -160px;
+      width: 36px;
+      height: 54px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #fff, var(--color));
-      opacity: 0.7;
-      animation: floatUp 12s linear forwards;
+      opacity: 0.75;
+      animation: floatUp linear forwards;
+      will-change: transform, opacity;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
+      from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -75,28 +75,53 @@
 <body>
 
   <div id="input-container">
-    <h1>🎈 Chọn ngày sinh của bạn 🎂</h1>
-    <select id="month">
-      <option value="">Tháng</option>
-      ${[...Array(12).keys()].map(i => `<option value="${String(i+1).padStart(2,'0')}">${String(i+1).padStart(2,'0')}</option>`).join('')}
-    </select>
-    <select id="day">
+    <h1>🎈 Chọn ngày sinh 🎂</h1>
+
+    <select id="day" aria-label="Chọn ngày">
       <option value="">Ngày</option>
-      ${[...Array(31).keys()].map(i => `<option value="${String(i+1).padStart(2,'0')}">${String(i+1).padStart(2,'0')}</option>`).join('')}
+      <!-- tạo sẵn option 01..31 bằng JS an toàn -->
     </select>
+    
+    <select id="month" aria-label="Chọn tháng">
+      <option value="">Tháng</option>
+      <option value="01">01</option>
+      <option value="02">02</option>
+      <option value="03">03</option>
+      <option value="04">04</option>
+      <option value="05">05</option>
+      <option value="06">06</option>
+      <option value="07">07</option>
+      <option value="08">08</option>
+      <option value="09">09</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+
   </div>
 
-  <div id="wish-container" class="hidden">
+  <div id="wish-container" class="hidden" aria-live="polite">
     <h1>🎉 Chúc Mừng Sinh Nhật Cô 🎉</h1>
-    <p id="wish-text"></p>
+    <p id="wish-text">Kính chúc cô một ngày sinh nhật thật vui vẻ 💖</p>
   </div>
 
   <script>
+    // tạo option ngày an toàn (để copy dán file html trực tiếp)
+    (function populateDays() {
+      const day = document.getElementById('day');
+      for (let i = 1; i <= 31; i++) {
+        const opt = document.createElement('option');
+        const val = String(i).padStart(2, '0');
+        opt.value = val;
+        opt.textContent = val;
+        day.appendChild(opt);
+      }
+    })();
+
     const wishes = [
       "Kính chúc cô một ngày sinh nhật thật vui vẻ, sức khỏe dồi dào và hạnh phúc bên gia đình ❤️",
       "Chúc cô tuổi mới luôn tràn đầy năng lượng tích cực, thành công trong công việc 🌸",
       "Chúc cô luôn trẻ trung, duyên dáng và nhận được thật nhiều yêu thương từ học trò 💐",
-      "Mong rằng hôm nay sẽ là khởi đầu cho một năm mới tràn đầy hạnh phúc và thành công 🌷",
       "Chúc cô mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho các thế hệ học sinh 🎓",
       "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌺",
       "Chúc cô có một sinh nhật thật đặc biệt, tràn ngập hoa, quà và những nụ cười yêu thương 🎀"
@@ -108,38 +133,66 @@
     const wishContainer = document.getElementById('wish-container');
     const wishText = document.getElementById('wish-text');
 
+    let wishesRunning = false; // khóa để chỉ chạy 1 vòng
+
     function createBalloon() {
+      // tạo ít hơn, và xóa sau animation xong (dùng duration random)
       const balloon = document.createElement('div');
-      balloon.classList.add('balloon');
-      balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.animationDuration = 10 + Math.random() * 5 + 's';
-      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 75%)`);
+      balloon.className = 'balloon';
+      balloon.style.left = Math.random() * 85 + 'vw'; // tránh rìa quá sát
+      const duration = 10 + Math.random() * 6; // 10-16s
+      balloon.style.animationDuration = duration + 's';
+      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 85%, 70%)`);
       document.body.appendChild(balloon);
-      setTimeout(() => balloon.remove(), 14000);
+      // dọn sau khi animation xong
+      setTimeout(() => {
+        if (balloon && balloon.parentNode) balloon.parentNode.removeChild(balloon);
+      }, (duration + 0.2) * 1000);
     }
 
-    async function showWishesSlowly() {
-      for (let i = 0; i < wishes.length; i++) {
-        wishText.style.opacity = 0;
-        await new Promise(r => setTimeout(r, 1000)); // fade out
-        wishText.textContent = wishes[i];
-        wishText.style.opacity = 1;
-        await new Promise(r => setTimeout(r, 8000)); // stay visible 8s
+    // hàm hiển thị tuần tự, mỗi câu giữ 8s (mượt và chắc chắn)
+    async function runWishesLoop() {
+      if (wishesRunning) return;
+      wishesRunning = true;
+      while (true) {
+        for (let i = 0; i < wishes.length; i++) {
+          // fade out (nếu đang visible)
+          wishText.style.opacity = 0;
+          await new Promise(r => setTimeout(r, 800)); // fade-out 0.8s
+          wishText.textContent = wishes[i];
+          // fade in
+          wishText.style.opacity = 1;
+          // giữ 8s hiển thị
+          await new Promise(r => setTimeout(r, 8000));
+        }
+        // nếu muốn vòng lặp dừng sau một lần, break; (hiện đang lặp vô hạn)
       }
-      showWishesSlowly(); // lặp lại sau khi hết
     }
 
     function showWish() {
-      if (monthSelect.value && daySelect.value) {
-        inputContainer.classList.add('hidden');
-        wishContainer.classList.remove('hidden');
-        setInterval(createBalloon, 2000); // nhẹ hơn, không lag
-        showWishesSlowly();
+      if (!monthSelect.value || !daySelect.value) return;
+      // chuyển giao diện
+      inputContainer.classList.add('hidden');
+      wishContainer.classList.remove('hidden');
+
+      // bắt đầu hiệu ứng bong bóng nhẹ nhàng (1 quả ~1.5s)
+      // dùng setInterval, nhưng lưu id để khi cần dừng có thể clearInterval
+      if (!window._balloonInterval) {
+        window._balloonInterval = setInterval(createBalloon, 1600); // 1.6s 1 quả => nhẹ
       }
+
+      // start lời chúc tuần tự (một lần)
+      runWishesLoop().catch(err => console.error(err));
     }
 
     monthSelect.addEventListener('change', showWish);
     daySelect.addEventListener('change', showWish);
+
+    // accessibility: nếu người dùng đã chọn cả 2 bằng keyboard, hỗ trợ Enter thay đổi
+    daySelect.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') showWish();
+    });
   </script>
+
 </body>
 </html>
