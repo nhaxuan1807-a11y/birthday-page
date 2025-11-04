@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>🎂 Chúc mừng sinh nhật 🎉</title>
+  <title>🎂 Chúc mừng sinh nhật cô 🎉</title>
   <style>
     body {
       margin: 0;
@@ -16,7 +16,6 @@
       font-family: 'Times New Roman', Times, serif;
       overflow: hidden;
       text-align: center;
-      position: relative;
     }
 
     h1 {
@@ -28,17 +27,15 @@
     }
 
     p {
-      font-size: 36px;
+      font-size: 40px;
       color: white;
-      margin: 10px 20px;
-      min-height: 60px;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
+      transition: opacity 1s ease;
+      max-width: 80%;
     }
 
     select {
       padding: 10px 15px;
-      font-size: 28px;
+      font-size: 30px;
       border-radius: 8px;
       border: none;
       outline: none;
@@ -55,9 +52,8 @@
       height: 60px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #fff, var(--color));
-      opacity: 0.9;
-      animation: floatUp linear forwards;
-      will-change: transform;
+      opacity: 0.7;
+      animation: floatUp 10s linear infinite;
     }
 
     @keyframes fadeIn {
@@ -67,83 +63,73 @@
 
     @keyframes floatUp {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
   <div id="input-container">
-    <h1>🎈 Chọn ngày sinh của cô 🎂</h1>
+    <h1>🎈 Chọn ngày sinh của bạn 🎂</h1>
     <select id="month">
       <option value="">Tháng</option>
-      <option value="01">01</option><option value="02">02</option>
-      <option value="03">03</option><option value="04">04</option>
-      <option value="05">05</option><option value="06">06</option>
-      <option value="07">07</option><option value="08">08</option>
-      <option value="09">09</option><option value="10">10</option>
-      <option value="11">11</option><option value="12">12</option>
+      ${[...Array(12).keys()].map(i => `<option value="${String(i+1).padStart(2, '0')}">${String(i+1).padStart(2, '0')}</option>`).join('')}
     </select>
     <select id="day">
       <option value="">Ngày</option>
-      <script>
-        for (let i = 1; i <= 31; i++) {
-          document.write(`<option value="${i.toString().padStart(2,'0')}">${i.toString().padStart(2,'0')}</option>`);
-        }
-      </script>
+      ${[...Array(31).keys()].map(i => `<option value="${String(i+1).padStart(2, '0')}">${String(i+1).padStart(2, '0')}</option>`).join('')}
     </select>
   </div>
 
   <div id="wish-container" class="hidden">
-    <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
-    <p id="wish-text"></p>
+    <h1>🎉 Chúc Mừng Sinh Nhật Cô 🎉</h1>
+    <p id="wish-text">Kính chúc cô một ngày sinh nhật thật vui vẻ 💖</p>
   </div>
 
   <script>
-    const monthSelect = document.getElementById('month');
-    const daySelect = document.getElementById('day');
-    const wishText = document.getElementById('wish-text');
-
     const wishes = [
       "Kính chúc cô một ngày sinh nhật thật vui vẻ, sức khỏe dồi dào và hạnh phúc bên gia đình ❤️",
       "Chúc cô tuổi mới luôn tràn đầy năng lượng tích cực, thành công trong công việc 🌸",
-      "Mong rằng mỗi ngày của cô đều ngập tràn tiếng cười và niềm vui 💖",
+      "Chúc cô luôn trẻ trung, duyên dáng và nhận được thật nhiều yêu thương từ học trò 💐",
+      "Mong rằng hôm nay sẽ là khởi đầu cho một năm mới tràn đầy hạnh phúc và thành công 🌷",
       "Chúc cô mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho các thế hệ học sinh 🎓",
       "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌷",
-      "Chúc cô có một sinh nhật thật đặc biệt, tràn ngập hoa, quà và những nụ cười yêu thương 🎀",
-      "Sinh nhật thật rực rỡ, thật ý nghĩa, và ngập tràn những điều tốt đẹp nhất 💝"
+      "Chúc cô có một sinh nhật thật đặc biệt, tràn ngập hoa, quà và những nụ cười yêu thương 🎀"
     ];
 
-    let currentIndex = 0;
+    const monthSelect = document.getElementById('month');
+    const daySelect = document.getElementById('day');
+    const wishContainer = document.getElementById('wish-container');
+    const inputContainer = document.getElementById('input-container');
+    const wishText = document.getElementById('wish-text');
 
     function createBalloon() {
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
       balloon.style.left = Math.random() * 100 + 'vw';
-      const duration = 8 + Math.random() * 4; // bay mượt hơn
-      balloon.style.animationDuration = duration + 's';
+      balloon.style.animationDuration = 8 + Math.random() * 5 + 's';
       balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 70%)`);
       document.body.appendChild(balloon);
-      setTimeout(() => balloon.remove(), duration * 1000);
+      setTimeout(() => balloon.remove(), 13000);
     }
 
     function showWish() {
       if (monthSelect.value && daySelect.value) {
-        document.getElementById('input-container').classList.add('hidden');
-        document.getElementById('wish-container').classList.remove('hidden');
-        setInterval(createBalloon, 1000); // vừa phải, không rung
-        showNextWish();
-      }
-    }
+        inputContainer.classList.add('hidden');
+        wishContainer.classList.remove('hidden');
+        setInterval(createBalloon, 1200);
 
-    function showNextWish() {
-      wishText.style.opacity = 0;
-      setTimeout(() => {
-        wishText.textContent = wishes[currentIndex];
-        wishText.style.opacity = 1;
-        currentIndex = (currentIndex + 1) % wishes.length;
-        setTimeout(showNextWish, 7000); // đổi câu sau 7 giây
-      }, 1000);
+        let index = 0;
+        wishText.textContent = wishes[index];
+        setInterval(() => {
+          index = (index + 1) % wishes.length;
+          wishText.style.opacity = 0;
+          setTimeout(() => {
+            wishText.textContent = wishes[index];
+            wishText.style.opacity = 1;
+          }, 1000);
+        }, 8000); // mỗi câu hiển thị ~8s
+      }
     }
 
     monthSelect.addEventListener('change', showWish);
