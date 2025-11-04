@@ -30,15 +30,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    input {
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: none;
-      text-align: center;
-      outline: none;
-    }
-
     button {
       margin-top: 15px;
       padding: 10px 20px;
@@ -77,9 +68,8 @@
 </head>
 <body>
   <div id="input-container">
-    <h1>🎈 Nhập ngày sinh của bạn 🎂</h1>
-    <input type="date" id="birthdayInput">
-    <button onclick="checkBirthday()">Xác nhận</button>
+    <h1>🎉 Chúc Mừng Sinh Nhật 🎉</h1>
+    <button onclick="showBirthdayWish()">Xem lời chúc</button>
   </div>
 
   <div id="wish-container" class="hidden">
@@ -102,21 +92,11 @@
       setTimeout(() => balloon.remove(), 8000);
     }
 
-    function checkBirthday() {
-      const input = document.getElementById('birthdayInput').value;
-      if (!input) return alert("🎂 Nhập ngày sinh trước nhé!");
-      
-      const today = new Date();
-      const bday = new Date(input);
-      
-      if (today.getDate() === bday.getDate() && today.getMonth() === bday.getMonth()) {
-        document.getElementById('input-container').classList.add('hidden');
-        document.getElementById('wish-container').classList.remove('hidden');
-        document.getElementById('music').play();
-        setInterval(createBalloon, 500);
-      } else {
-        alert("😄 Hôm nay chưa phải sinh nhật bạn đâu nha!");
-      }
+    function showBirthdayWish() {
+      document.getElementById('input-container').classList.add('hidden');
+      document.getElementById('wish-container').classList.remove('hidden');
+      document.getElementById('music').play();
+      setInterval(createBalloon, 500);
     }
   </script>
 </body>
