@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <title>🎂 Chúc mừng sinh nhật cô 🎉</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -29,17 +27,19 @@
       text-shadow: 2px 2px 10px #ff69b4;
       margin-bottom: 18px;
       animation: fadeIn 1.2s ease-in;
+      z-index: 2;
     }
 
     p {
       font-size: 32px;
       color: white;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 2s ease;
       max-width: 85%;
       margin: 0 auto 10px;
-      line-height: 1.5;
-      min-height: 72px;
+      line-height: 1.6;
+      white-space: pre-line;
+      z-index: 2;
     }
 
     .select-row {
@@ -61,9 +61,7 @@
       transition: transform 0.2s ease;
     }
 
-    select:focus {
-      transform: scale(1.05);
-    }
+    select:focus { transform: scale(1.05); }
 
     .hidden { display: none; }
 
@@ -83,7 +81,6 @@
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #fff, var(--color));
       opacity: 0.8;
-      will-change: transform, opacity;
       animation: floatUp linear forwards;
     }
 
@@ -129,11 +126,11 @@
 
   <div id="wish-container" class="hidden" aria-live="polite">
     <h1>🎉 Chúc Mừng Sinh Nhật Cô 🎉</h1>
-    <p id="wish-text">Kính chúc cô một ngày sinh nhật thật vui vẻ 💖</p>
+    <p id="wish-text"></p>
   </div>
 
   <script>
-    // tạo ngày 01-31
+    // tạo danh sách ngày
     (function populateDays() {
       const day = document.getElementById('day');
       for (let i = 1; i <= 31; i++) {
@@ -146,11 +143,8 @@
     })();
 
     const wishes = [
-  `Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc.  
-  Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò.  
-  Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình.  
- Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương 💐💖`
-];
+      `🌸 Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc.\n\n🌼 Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò.\n\n🌺 Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình.\n\n💐 Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương! 💖`
+    ];
 
     const monthSelect = document.getElementById('month');
     const daySelect = document.getElementById('day');
@@ -176,14 +170,12 @@
       if (wishesRunning) return;
       wishesRunning = true;
 
-      while (true) {
-        for (const msg of wishes) {
-          wishText.style.opacity = 0;
-          await new Promise(r => setTimeout(r, 800));
-          wishText.textContent = msg;
-          wishText.style.opacity = 1;
-          await new Promise(r => setTimeout(r, 8000));
-        }
+      for (const msg of wishes) {
+        wishText.style.opacity = 0;
+        await new Promise(r => setTimeout(r, 500));
+        wishText.textContent = msg;
+        wishText.style.opacity = 1;
+        await new Promise(r => setTimeout(r, 45000)); // hiển thị 45s
       }
     }
 
@@ -194,7 +186,7 @@
       wishContainer.classList.remove('hidden');
 
       if (!window._balloonInterval) {
-        window._balloonInterval = setInterval(createBalloon, 1800);
+        window._balloonInterval = setInterval(createBalloon, 1500);
       }
 
       runWishesLoop().catch(console.error);
