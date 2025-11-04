@@ -31,6 +31,7 @@
       color: white;
       margin: 10px 20px;
       min-height: 50px;
+      transition: opacity 1s ease-in-out;
     }
 
     select {
@@ -100,23 +101,26 @@
     const wishText = document.getElementById('wish-text');
 
     const wishes = [
-      "Kính chúc cô một ngày sinh nhật thật vui vẻ, sức khỏe dồi dào và hạnh phúc bên gia đình.",
-      "Chúc cô tuổi mới nhiều niềm vui, may mắn và luôn gặt hái thành công trong công việc.",
-      "Chúc cô sinh nhật vui vẻ, công việc thuận lợi, và luôn được học trò yêu thương!",
-      "Mong rằng mỗi ngày của cô đều tràn ngập hạnh phúc và tiếng cười.",
-      "Chúc cô mạnh khỏe, hạnh phúc, và tiếp tục truyền cảm hứng cho học sinh như cô vẫn làm."
+      "Kính chúc cô một ngày sinh nhật thật vui vẻ, sức khỏe dồi dào và hạnh phúc bên gia đình ❤️",
+      "Chúc cô tuổi mới luôn tràn đầy năng lượng tích cực, thành công trong công việc 🌸",
+      "Chúc cô luôn trẻ trung, duyên dáng và nhận được thật nhiều yêu thương từ học trò 💐",
+      "Mong rằng mỗi ngày của cô đều ngập tràn tiếng cười và niềm vui 💖",
+      "Chúc cô mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho các thế hệ học sinh 🎓",
+      "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌷",
+      "Sinh nhật thật rực rỡ, thật ý nghĩa, và ngập tràn những điều tốt đẹp nhất 💝"
     ];
 
     let currentIndex = 0;
+    let intervalId;
 
     function createBalloon() {
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
       balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.width = 20 + Math.random()*30 + 'px';
-      balloon.style.height = 30 + Math.random()*40 + 'px';
+      balloon.style.width = 20 + Math.random() * 30 + 'px';
+      balloon.style.height = 30 + Math.random() * 40 + 'px';
       balloon.style.animationDuration = 4 + Math.random() * 4 + 's';
-      balloon.style.setProperty('--color', `hsl(${Math.random()*360}, 100%, 70%)`);
+      balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 70%)`);
       document.body.appendChild(balloon);
       setTimeout(() => balloon.remove(), 8000);
     }
@@ -125,26 +129,37 @@
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
       confetti.style.left = Math.random() * 100 + 'vw';
-      confetti.style.width = 10 + Math.random()*10 + 'px';
-      confetti.style.height = 10 + Math.random()*10 + 'px';
+      confetti.style.width = 10 + Math.random() * 10 + 'px';
+      confetti.style.height = 10 + Math.random() * 10 + 'px';
       confetti.style.animationDuration = 3 + Math.random() * 3 + 's';
-      confetti.style.setProperty('--color', `hsl(${Math.random()*360}, 100%, 50%)`);
+      confetti.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 50%)`);
       document.body.appendChild(confetti);
       setTimeout(() => confetti.remove(), 6000);
     }
 
+    function nextWish() {
+      wishText.style.opacity = 0;
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % wishes.length;
+        wishText.textContent = wishes[currentIndex];
+        wishText.style.opacity = 1;
+        scheduleNextWish(); // lên lịch câu kế tiếp
+      }, 1000);
+    }
+
+    function scheduleNextWish() {
+      const delay = Math.floor(40000 + Math.random() * 20000); // 40–60s
+      clearTimeout(intervalId);
+      intervalId = setTimeout(nextWish, delay);
+    }
+
     function showWish() {
-      if(monthSelect.value && daySelect.value){
+      if (monthSelect.value && daySelect.value) {
         document.getElementById('input-container').classList.add('hidden');
         document.getElementById('wish-container').classList.remove('hidden');
-        currentIndex = 0;
-        wishText.textContent = wishes[currentIndex];
 
-        // Hiển thị lần lượt từng lời chúc mỗi 5-10 giây
-        setInterval(() => {
-          currentIndex = (currentIndex + 1) % wishes.length;
-          wishText.textContent = wishes[currentIndex];
-        }, 30000-60000); // 7 giây, bạn có thể đổi 5000-10000 để random thời gian
+        wishText.textContent = wishes[currentIndex];
+        scheduleNextWish();
 
         setInterval(createBalloon, 300);
         setInterval(createConfetti, 200);
