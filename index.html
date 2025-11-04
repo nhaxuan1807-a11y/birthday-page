@@ -102,6 +102,11 @@
   <div id="input-container">
     <h1>🎈 Chọn ngày sinh 🎂</h1>
     <div class="select-row">
+      <!-- Ngày ở trước, tháng ở sau -->
+      <select id="day" aria-label="Chọn ngày">
+        <option value="">Ngày</option>
+      </select>
+
       <select id="month" aria-label="Chọn tháng">
         <option value="">Tháng</option>
         <option value="01">01</option>
@@ -116,10 +121,6 @@
         <option value="10">10</option>
         <option value="11">11</option>
         <option value="12">12</option>
-      </select>
-
-      <select id="day" aria-label="Chọn ngày">
-        <option value="">Ngày</option>
       </select>
     </div>
   </div>
@@ -142,8 +143,12 @@
       }
     })();
 
+    // 💬 Cập nhật đoạn chúc như bạn yêu cầu
     const wishes = [
-      `🌸 Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc.\n\n🌼 Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò.\n\n🌺 Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình.\n\n💐 Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương! 💖`
+      `Nhân ngày sinh nhật của cô, em xin kính chúc cô thật nhiều sức khỏe, niềm vui và hạnh phúc. 
+Chúc cô luôn giữ mãi nụ cười rạng rỡ, nhiệt huyết với nghề và tiếp tục truyền cảm hứng cho bao thế hệ học trò. 
+Mong cô luôn được yêu thương, trân trọng và có thật nhiều khoảnh khắc đáng nhớ bên gia đình và học sinh của mình. 
+Chúc cô có một ngày sinh nhật thật trọn vẹn, thật nhiều niềm vui và yêu thương 💐💖`
     ];
 
     const monthSelect = document.getElementById('month');
@@ -175,7 +180,6 @@
         await new Promise(r => setTimeout(r, 500));
         wishText.textContent = msg;
         wishText.style.opacity = 1;
-        await new Promise(r => setTimeout(r, 45000)); // hiển thị 45s
       }
     }
 
