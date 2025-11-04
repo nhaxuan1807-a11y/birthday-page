@@ -107,10 +107,10 @@
     const wishes = [
       "Kính chúc cô một ngày sinh nhật thật vui vẻ, sức khỏe dồi dào và hạnh phúc bên gia đình ❤️",
       "Chúc cô tuổi mới luôn tràn đầy năng lượng tích cực, thành công trong công việc 🌸",
-      "Chúc cô luôn trẻ trung, duyên dáng và nhận được thật nhiều yêu thương từ học trò 💐",
       "Mong rằng mỗi ngày của cô đều ngập tràn tiếng cười và niềm vui 💖",
       "Chúc cô mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho các thế hệ học sinh 🎓",
       "Chúc cô luôn là bông hoa tỏa hương trong vườn tri thức 🌷",
+      "Chúc cô có một sinh nhật thật đặc biệt, tràn ngập hoa, quà và những nụ cười yêu thương 🎀",
       "Sinh nhật thật rực rỡ, thật ý nghĩa, và ngập tràn những điều tốt đẹp nhất 💝"
     ];
 
@@ -120,7 +120,7 @@
       const balloon = document.createElement('div');
       balloon.classList.add('balloon');
       balloon.style.left = Math.random() * 100 + 'vw';
-      const duration = 6 + Math.random() * 6; // bay chậm hơn
+      const duration = 8 + Math.random() * 4; // bay mượt hơn
       balloon.style.animationDuration = duration + 's';
       balloon.style.setProperty('--color', `hsl(${Math.random() * 360}, 100%, 70%)`);
       document.body.appendChild(balloon);
@@ -131,7 +131,7 @@
       if (monthSelect.value && daySelect.value) {
         document.getElementById('input-container').classList.add('hidden');
         document.getElementById('wish-container').classList.remove('hidden');
-        setInterval(createBalloon, 800); // ít bong bóng hơn, giảm rung
+        setInterval(createBalloon, 1000); // vừa phải, không rung
         showNextWish();
       }
     }
@@ -142,9 +142,8 @@
         wishText.textContent = wishes[currentIndex];
         wishText.style.opacity = 1;
         currentIndex = (currentIndex + 1) % wishes.length;
-        const delay = 40000 + Math.random() * 20000;
-        setTimeout(showNextWish, delay);
-      }, 1500);
+        setTimeout(showNextWish, 7000); // đổi câu sau 7 giây
+      }, 1000);
     }
 
     monthSelect.addEventListener('change', showWish);
